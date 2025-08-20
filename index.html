@@ -13,114 +13,49 @@
     <!-- Подключение Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Общие стили и цветовая палитра */
+        /* Глобальные переменные для удобства */
         :root {
-            --color-blue: #141f32;
-            --color-dark-blue: #070c1a;
-            --color-gold: #c9a778;
-            --color-white: #e0e1dd;
-            --color-light-grey: #adb5bd;
-
-            /* Цвета для нового, более заметного градиента */
-            --gradient-color1: #0b1526;
-            --gradient-color2: #14284d;
-            --gradient-color3: #1c3d69;
-            --gradient-color4: #255180;
+            --color-blue: #162a4d;
+            --color-dark-blue: #0c1a2e;
+            --color-gold: #e2c08d;
+            --color-white: #f0f0f0;
+            --color-light-grey: #c8c8c8;
+            --color-accent-gold-light: #f5d6a8;
         }
 
-        /* Обнуление базовых стилей */
+        /* Общие стили для всех устройств */
         *, *::before, *::after {
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Скрываем прокрутку, так как она контролируется скриптом */
-        }
-
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--color-dark-blue);
             color: var(--color-white);
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
             position: relative;
+            min-height: 100vh;
         }
 
-        /* НОВЫЙ, УЛУЧШЕННЫЙ ГРАДИЕНТНЫЙ ФОН с эффектом звездного неба */
+        /* Фоновое изображение с затемнением и размытием */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            /* Используем несколько слоев для создания глубины и динамики */
-            background:
-                /* Слой с более заметным "шумом" для эффекта звезд */
-                radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
-                radial-gradient(ellipse at bottom right, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
-                /* Основной анимированный градиент */
-                linear-gradient(135deg, #070c1a 0%, #152540 100%),
-                linear-gradient(-45deg, #102030 0%, #1c3d69 100%);
-
-            background-size: 100% 100%, 100% 100%, 300% 300%, 200% 200%;
-            background-position: 0% 0%, 0% 0%, 0% 50%, 100% 50%;
-            animation: cosmic-shift 25s ease-in-out infinite, cosmic-pulse 20s ease-in-out infinite;
+            background: url('bg3.jpg') center center no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            filter: brightness(0.5) blur(3px);
         }
 
-        /* Анимация для смещения градиента */
-        @keyframes cosmic-shift {
-            0% { background-position: 0% 50%, 0% 50%, 0% 50%, 100% 50%; }
-            50% { background-position: 100% 50%, 100% 50%, 100% 50%, 0% 50%; }
-            100% { background-position: 0% 50%, 0% 50%, 0% 50%, 100% 50%; }
-        }
-
-        /* Анимация для пульсации, создающая эффект живого фона */
-        @keyframes cosmic-pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Обёртка для полноэкранных слайдов */
-        .fullpage-wrapper {
-            height: 100vh;
-            position: relative;
-            transition: transform 0.8s ease-in-out;
-        }
-
-        /* Улучшенные стили для слайд-секций */
-        .section {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 0 20px;
-            pointer-events: none;
-            /* Анимация прокрутки: плавный выезд слайда снизу */
-            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
-            transform: translateY(100%); /* Все слайды по умолчанию смещены вниз */
-            opacity: 0;
-        }
-
-        /* Активный слайд перемещается на своё место и становится видимым */
-        .section.active {
-            pointer-events: all;
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* Единый контейнер для содержимого на первых и последних слайдах */
-        .content-container {
-            background-color: var(--color-blue);
+        /* Контейнеры для содержимого */
+        .content-container, .container {
+            background-color: rgba(22, 42, 77, 0.5);
+            backdrop-filter: blur(5px);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
@@ -136,98 +71,161 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            max-width: 900px;
-            width: 100%;
-            padding: 0 20px;
+            padding: 40px;
         }
 
-        /* Увеличение контейнера при наведении на средних слайдах */
-        .post-card:hover,
-        .ideology-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px 5px rgba(201, 167, 120, 0.8);
-        }
-
-        /* Главная секция - более элегантный дизайн */
-        .hero {
-            background-color: transparent;
+        /* Стили для заголовков */
+        .section-header {
+            font-size: 2rem;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--color-gold);
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-bottom: 30px;
             color: var(--color-white);
             position: relative;
-            z-index: 1;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            overflow: hidden;
         }
 
-        /* Анимация текста при наведении */
-        .interactive-text {
-            cursor: pointer;
-            transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
-            display: inline-block;
+        /* Глянцевое сияние для заголовков */
+        .section-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-20deg);
+            transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .section-header:hover::after {
+            left: 150%;
         }
 
-        .hero h1 .interactive-text:hover,
-        .post-card h3 .interactive-text:hover,
-        .ideology-item h3 .interactive-text:hover {
+        /* Сетка для карточек */
+        .posts-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+            grid-auto-rows: 1fr;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .three-column-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+            grid-auto-rows: 1fr;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        /* Стили для карточек */
+        .post-card, .ideology-item {
+            background-color: rgba(22, 42, 77, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Анимация золотой рамки на карточках */
+        .post-card::before, .ideology-item::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 0; height: 2px;
+            background-color: var(--color-gold); transition: width 0.3s ease-out;
+        }
+        .post-card:hover::before, .ideology-item:hover::before { width: 100%; }
+        .post-card::after, .ideology-item::after {
+            content: ''; position: absolute; bottom: 0; right: 0; width: 0; height: 2px;
+            background-color: var(--color-gold); transition: width 0.3s ease-out; transition-delay: 0.3s;
+        }
+        .post-card:hover::after, .ideology-item:hover::after { width: 100%; }
+        .post-card .post-card-border-left, .ideology-item .ideology-item-border-left {
+            content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 0;
+            background-color: var(--color-gold); transition: height 0.3s ease-out; transition-delay: 0.6s;
+        }
+        .post-card:hover .post-card-border-left, .ideology-item:hover .ideology-item-border-left { height: 100%; }
+        .post-card .post-card-border-right, .ideology-item .ideology-item-border-right {
+            content: ''; position: absolute; top: 0; right: 0; width: 2px; height: 0;
+            background-color: var(--color-gold); transition: height 0.3s ease-out; transition-delay: 0.9s;
+        }
+        .post-card:hover .post-card-border-right, .ideology-item:hover .ideology-item-border-right { height: 100%; }
+
+        .post-card h3, .ideology-item h3 {
+            font-size: 1.2rem;
             color: var(--color-gold);
-            text-shadow: 0 0 10px rgba(201, 167, 120, 0.8);
-            transform: scale(1.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .hero p .interactive-text:hover,
-        .post-card p .interactive-text:hover,
-        .ideology-item p .interactive-text:hover,
-        .contacts-section p .interactive-text:hover {
-            color: var(--color-white);
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        .post-card p, .ideology-item p {
+            flex-grow: 1;
+            color: var(--color-light-grey);
+            font-size: 0.9rem;
+            text-align: center;
+            position: relative;
         }
 
-        .hero h1 {
-            font-size: clamp(2.5rem, 8vw, 3.5rem);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 15px;
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-            animation: heroTextFadeIn 1.5s ease-out forwards;
-        }
-
-        .hero h1 span {
-            color: var(--color-gold);
-        }
-
-        .hero h1 span.text-gold {
-            text-decoration: underline; /* Подчеркиваем текст */
-            text-underline-offset: 8px; /* Отступ подчеркивания */
-            text-decoration-thickness: 2px; /* Толщина подчеркивания */
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            margin-bottom: 30px;
-            animation: heroTextFadeIn 1.5s ease-out 0.5s forwards;
-            opacity: 0;
-        }
-
-        /* Кнопка с мягким эффектом и обводкой при наведении */
-        .btn-subscribe {
+        /* Кнопки */
+        .btn-subscribe, .contact-btn {
             display: inline-block;
             background-color: var(--color-gold);
             color: var(--color-dark-blue);
-            padding: 15px 35px;
+            padding: 12px 25px;
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
             box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
-            animation: heroBtnFadeIn 1.5s ease-out 1s forwards;
-            opacity: 0;
         }
 
-        .btn-subscribe:hover {
+        .btn-subscribe:hover, .contact-btn:hover {
             transform: scale(1.05);
-            background-color: #d1b58e;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px 5px rgba(201, 167, 120, 0.8);
+            background-color: var(--color-accent-gold-light);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px 5px var(--color-accent-gold-light);
         }
 
-        /* Ключевые кадры для анимации первого слайда */
+        .contact-btn i {
+            margin-right: 8px;
+        }
+
+        .contacts-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Футер */
+        .footer {
+            padding: 15px;
+            text-align: center;
+            font-size: 0.8rem;
+            background-color: rgba(12, 26, 46, 0.8);
+            margin-top: 20px;
+        }
+
+        /* ---------------------------------------------------- */
+        /* Анимации для плавного появления текста */
+        /* ---------------------------------------------------- */
         @keyframes heroTextFadeIn {
             from {
                 opacity: 0;
@@ -242,7 +240,7 @@
         @keyframes heroBtnFadeIn {
             from {
                 opacity: 0;
-                transform: scale(0.8);
+                transform: scale(0.9);
             }
             to {
                 opacity: 1;
@@ -250,161 +248,127 @@
             }
         }
 
-        /* Общие стили для секций */
-        .section-header {
-            font-size: clamp(1.8rem, 6vw, 2rem);
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--color-gold);
-            display: inline-block;
-            padding-bottom: 8px;
-            margin-bottom: 40px;
-            color: var(--color-white);
+        /* ---------------------------------------------------- */
+        /* Стили для настольной версии (по умолчанию) */
+        /* ---------------------------------------------------- */
+        .fullpage-wrapper {
+            height: 100vh;
             position: relative;
-            z-index: 2;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            transition: transform 0.8s ease-in-out;
         }
 
-        .section-text {
-            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
-            color: var(--color-light-grey);
-            max-width: 800px;
-            margin: 0 auto 40px;
-        }
-
-        /* Сетка для двух колонок */
-        .posts-grid {
-            display: grid;
-            gap: 40px;
-            margin-top: 40px;
-            grid-auto-rows: 1fr; /* Гарантирует одинаковую высоту */
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        /* Сетка для трёх колонок (общие стили) */
-        .three-column-grid {
-            display: grid;
-            gap: 25px;
-            margin-top: 40px;
-            grid-auto-rows: 1fr; /* Гарантирует одинаковую высоту */
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-
-        @media (min-width: 1024px) {
-            .three-column-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .three-column-grid, .posts-grid {
-                grid-template-columns: repeat(1, 1fr);
-            }
-        }
-
-        /* Общие стили для карточек, чтобы они были гибкими и выровненными */
-        .post-card, .ideology-item {
-            background-color: var(--color-blue);
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .section {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Распределяет пространство между элементами */
-            height: auto;
-        }
-
-        .post-card h3, .ideology-item h3 {
-            font-size: 1.2rem;
-            color: var(--color-gold);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-            /* Убедимся, что иконки и текст в заголовке центрированы */
-            display: flex;
             align-items: center;
             justify-content: center;
-            flex-wrap: wrap; /* Разрешаем перенос текста, если он длинный */
-        }
-
-        .post-card h3 i, .ideology-item h3 i {
-            margin-right: 8px;
-        }
-
-        .post-card p {
-            flex-grow: 1; /* Чтобы текст занимал оставшееся пространство */
-            color: var(--color-light-grey);
-            font-size: clamp(0.75rem, 2vw, 0.9rem);
-            text-align: center;
-        }
-
-        /* Секция с идеологией */
-        .ideology-list {
-            list-style: none;
-            padding: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            grid-auto-rows: 1fr; /* Гарантирует одинаковую высоту */
-        }
-
-        .ideology-item p {
-            flex-grow: 1; /* Чтобы текст занимал оставшееся пространство */
-            font-size: clamp(0.7rem, 2vw, 0.9rem);
-            color: var(--color-light-grey);
-            text-align: center;
-        }
-
-        /* Секция с контактами */
-        .contacts-section {
-            background-color: transparent;
-            color: var(--color-white);
-        }
-
-        .contacts-list {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .contacts-list a {
-            color: var(--color-white);
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: color 0.3s ease, transform 0.3s ease;
-        }
-
-        .contacts-list a:hover {
-            color: var(--color-gold);
-            transform: scale(1.1);
-        }
-
-        /* Футер */
-        .footer {
-            background-color: var(--color-dark-blue);
-            color: var(--color-white);
-            text-align: center;
             padding: 20px;
-            border-top: 1px solid var(--color-blue);
-            height: auto;
-            min-height: 100px;
+            pointer-events: none;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+            transform: translateY(100%);
+            opacity: 0;
+            overflow-y: auto;
         }
 
-        .footer a {
-            color: var(--color-white);
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s ease;
+        .section.active {
+            pointer-events: all;
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        .footer a:hover {
-            color: var(--color-gold);
+        .hero h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+            animation: heroTextFadeIn 1.5s ease-out forwards;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            opacity: 0; /* Начальное состояние для анимации */
+            animation: heroTextFadeIn 1.5s ease-out 0.5s forwards;
+        }
+
+        .btn-subscribe {
+            opacity: 0; /* Начальное состояние для анимации */
+            animation: heroBtnFadeIn 1.5s ease-out 1s forwards;
+        }
+
+        .post-card:hover, .ideology-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ---------------------------------------------------- */
+        /* Стили для мобильных устройств (переопределение) */
+        /* ---------------------------------------------------- */
+        @media (max-width: 767px) {
+            body {
+                overflow-x: hidden;
+                overflow-y: auto; /* Включаем прокрутку */
+            }
+
+            /* Отключаем полноэкранный режим */
+            .fullpage-wrapper {
+                height: auto;
+                position: relative;
+            }
+
+            /* Сбрасываем стили секций для мобильной версии */
+            .section {
+                position: relative;
+                height: auto;
+                transform: none;
+                opacity: 1;
+                pointer-events: all;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            /* На мобильных убираем анимации и градиенты для лучшей производительности */
+            .hero h1, .hero p, .btn-subscribe {
+                animation: none !important;
+                opacity: 1 !important;
+            }
+            .hero h1 .interactive-text {
+                background: none;
+                -webkit-background-clip: unset;
+                background-clip: unset;
+                -webkit-text-fill-color: var(--color-white);
+                color: var(--color-white);
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .posts-grid, .three-column-grid {
+                grid-template-columns: 1fr; /* Одна колонка для мобильных */
+            }
+
+            .post-card:hover, .ideology-item:hover {
+                transform: none; /* Отключаем анимации при наведении */
+            }
+
+            .post-card::before, .post-card::after,
+            .ideology-item::before, .ideology-item::after,
+            .post-card .post-card-border-left, .post-card .post-card-border-right,
+            .ideology-item .ideology-item-border-left, .ideology-item .ideology-item-border-right {
+                display: none; /* Отключаем рамки при наведении */
+            }
+
+            /* Стиль для футера */
+            .footer {
+                padding: 20px;
+                background-color: rgba(12, 26, 46, 0.8);
+                margin-top: 0;
+            }
         }
     </style>
 </head>
@@ -412,13 +376,12 @@
     <div class="fullpage-wrapper">
         <!-- Главная секция -->
         <section class="section active" id="slide-hero">
-            <div class="content-container">
+            <div class="content-container hero">
                 <h1>
-                    <span class="interactive-text">ЗАЩИТНИК</span>
-                    <span class="interactive-text text-gold">НАЦИИ</span>
+                    <span class="interactive-text">ЗАЩИТНИК НАЦИИ</span>
                 </h1>
-                <p><span class="interactive-text">РУСЬ</span></p>
-                <p><span class="interactive-text">Официальный Telegram-канал сообщества «Защитник Нации»</span></p>
+                <p>РУСЬ</p>
+                <p>Официальный Telegram-канал сообщества «Защитник Нации»</p>
 
                 <a href="https://t.me/naz_power" class="btn-subscribe" target="_blank" id="subscribe-btn">
                     <i class="fas fa-paper-plane"></i> Подписаться в Telegram
@@ -432,20 +395,19 @@
                 <h2 class="section-header">Наши лучшие посты</h2>
                 <div class="posts-grid">
                     <div class="post-card">
-                        <h3><i class="fas fa-history"></i> <span class="interactive-text">Память о подвиге и трагедии</span></h3>
+                        <span class="post-card-border-left"></span>
+                        <span class="post-card-border-right"></span>
+                        <h3><i class="fas fa-history"></i> Память о подвиге и трагедии</h3>
                         <p>
-                            <span class="interactive-text">
-                                <strong>16 на 17 июля 1918 года</strong> — чёрная дата в истории России. В подвале Ипатьевского дома в Екатеринбурге красные палачи — большевики — совершили чудовищное преступление. Царская семья во главе с Императором Николаем II была зверски расстреляна.
-                            </span>
+                            <strong>16 на 17 июля 1918 года</strong> — чёрная дата в истории России. В подвале Ипатьевского дома в Екатеринбурге красные палачи — большевики — совершили чудовищное преступление. Царская семья во главе с Императором Николая II была зверски расстреляна.
                         </p>
                     </div>
-
                     <div class="post-card">
-                        <h3><i class="fas fa-medkit"></i> <span class="interactive-text">Слава военным медикам!</span></h3>
+                        <span class="post-card-border-left"></span>
+                        <span class="post-card-border-right"></span>
+                        <h3><i class="fas fa-medkit"></i> Слава военным медикам Русской Армии!</h3>
                         <p>
-                            <span class="interactive-text">
-                                В огне боя, под грохот снарядов, там, где каждый миг — между жизнью и смертью, они стоят на передовой другого фронта — фронта спасения. Военные медики — это не просто врачи, это ангелы-хранители в камуфляже.
-                            </span>
+                            В огне боя, под грохот снарядов, там, где каждый миг — между жизнью и смертью, они стоят на передовой другого фронта — фронта спасения. Военные медики — это не просто врачи, это ангелы-хранители в камуфляже.
                         </p>
                     </div>
                 </div>
@@ -458,21 +420,27 @@
                 <h2 class="section-header">Последние новости СВО</h2>
                 <div class="three-column-grid">
                     <div class="post-card">
-                        <h3><i class="fas fa-bullhorn"></i> <span class="interactive-text">Брифинг МинОбороны</span></h3>
+                        <span class="post-card-border-left"></span>
+                        <span class="post-card-border-right"></span>
+                        <h3><i class="fas fa-bullhorn"></i> Брифинг Министерства Обороны</h3>
                         <p>
-                            <span class="interactive-text">Официальный брифинг Министерства Обороны России о ходе специальной военной операции за последнюю неделю. Главные события и достижения наших войск.</span>
+                            Официальный брифинг Министерства Обороны России о ходе специальной военной операции за последнюю неделю. Главные события и достижения наших войск.
                         </p>
                     </div>
                     <div class="post-card">
-                        <h3><i class="fas fa-hand-holding-heart"></i> <span class="interactive-text">Акция "Помощь Фронту"</span></h3>
+                        <span class="post-card-border-left"></span>
+                        <span class="post-card-border-right"></span>
+                        <h3><i class="fas fa-hand-holding-heart"></i> Акция "Помощь Фронту"</h3>
                         <p>
-                            <span class="interactive-text">Началась новая общероссийская акция по сбору гуманитарной помощи для наших бойцов на передовой. Каждый может внести свой вклад.</span>
+                            Началась новая общероссийская акция по сбору гуманитарной помощи для наших бойцов на передовой. Каждый может внести свой вклад.
                         </p>
                     </div>
                     <div class="post-card">
-                        <h3><i class="fas fa-book-reader"></i> <span class="interactive-text">Исторический обзор боевых действий</span></h3>
+                        <span class="post-card-border-left"></span>
+                        <span class="post-card-border-right"></span>
+                        <h3><i class="fas fa-book-reader"></i> Исторический обзор боевых действий</h3>
                         <p>
-                            <span class="interactive-text">Наши военные аналитики подготовили детальный исторический обзор последних ключевых событий в зоне СВО. Анализ тактики и стратегии.</span>
+                            Наши военные аналитики подготовили детальный исторический обзор последних ключевых событий в зоне СВО. Анализ тактики и стратегии.
                         </p>
                     </div>
                 </div>
@@ -485,27 +453,33 @@
                 <h2 class="section-header">Наша Идеология</h2>
                 <div class="section-text">
                     <p>
-                        <span class="interactive-text">Сообщество «Защитник Нации» объединяет людей, для которых Россия — это не просто страна, а судьба и священная Родина. Мы верим в силу национального духа и непреходящие ценности нашего народа.</span>
+                        Сообщество «Защитник Нации» объединяет людей, для которых Россия — это не просто страна, а судьба и священная Родина. Мы верим в силу национального духа и непреходящие ценности нашего народа.
                     </p>
                 </div>
 
                 <div class="three-column-grid">
                     <div class="ideology-item">
-                        <h3><i class="fas fa-landmark"></i> <span class="interactive-text">Национальное Самосознание</span></h3>
+                        <span class="ideology-item-border-left"></span>
+                        <span class="ideology-item-border-right"></span>
+                        <h3><i class="fas fa-landmark"></i> Национальное Самосознание</h3>
                         <p>
-                            <span class="interactive-text">Мы чтим нашу историю, культуру и традиции. Мы убеждены, что только через глубокое понимание своего прошлого можно построить достойное будущее.</span>
+                            Мы чтим нашу историю, культуру и традиции. Мы убеждены, что только через глубокое понимание своего прошлого можно построить достойное будущее.
                         </p>
                     </div>
                     <div class="ideology-item">
-                        <h3><i class="fas fa-handshake"></i> <span class="interactive-text">Единство и Взаимопомощь</span></h3>
+                        <span class="ideology-item-border-left"></span>
+                        <span class="ideology-item-border-right"></span>
+                        <h3><i class="fas fa-handshake"></i> Единство и Взаимопомощь</h3>
                         <p>
-                            <span class="interactive-text">Нация сильна своим единством. Мы поддерживаем друг друга и стремимся к укреплению связей внутри русского сообщества, как в России, так и за ее пределами.</span>
+                            Нация сильна своим единством. Мы поддерживаем друг друга и стремимся к укреплению связей внутри русского сообщества, как в России, так и за ее пределами.
                         </p>
                     </div>
                     <div class="ideology-item">
-                        <h3><i class="fas fa-shield-alt"></i> <span class="interactive-text">Защита и Суверенитет</span></h3>
+                        <span class="ideology-item-border-left"></span>
+                        <span class="ideology-item-border-right"></span>
+                        <h3><i class="fas fa-shield-alt"></i> Защита и Суверенитет</h3>
                         <p>
-                            <span class="interactive-text">Мы стоим на страже суверенитета и целостности нашей страны. Мы поддерживаем тех, кто защищает нашу Родину, и готовы сами встать на ее защиту.</span>
+                            Мы стоим на страже суверенитета и целостности нашей страны. Мы поддерживаем тех, кто защищает нашу Родину, и готовы сами встать на ее защиту.
                         </p>
                     </div>
                 </div>
@@ -518,7 +492,7 @@
                 <h2 class="section-header">Поддержим наших героев</h2>
                 <div class="section-text">
                     <p>
-                        <span class="interactive-text">Сообщество «Защитник Нации» оказывает всестороннюю поддержку участникам специальной военной операции. Мы верим, что наша общая цель — это победа, и каждый вклад важен.</span>
+                        Сообщество «Защитник Нации» оказывает всестороннюю поддержку участникам специальной военной операции. Мы верим, что наша общая цель — это победа, и каждый вклад важен.
                     </p>
                 </div>
                 <a href="https://t.me/naz_power" class="btn-subscribe" target="_blank">
@@ -533,69 +507,83 @@
                 <h2 class="section-header">Контакты</h2>
                 <p>Свяжитесь с нами через наши официальные страницы:</p>
                 <ul class="contacts-list">
-                    <li><a href="https://t.me/naz_power" target="_blank">Telegram</a></li>
-                    <li><a href="https://vk.com/naz_power" target="_blank">ВКонтакте</a></li>
+                    <li>
+                        <a href="https://t.me/naz_power" class="contact-btn" target="_blank">
+                            <i class="fab fa-telegram-plane"></i> Telegram
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://vk.com/naz_power" class="contact-btn" target="_blank">
+                            <i class="fab fa-vk"></i> ВКонтакте
+                        </a>
+                    </li>
                 </ul>
             </div>
         </section>
     </div>
-    <!-- Футер вынесен из обёртки, чтобы он был доступен после последнего слайда -->
+    <!-- Футер -->
     <footer class="footer">
         <div class="container">
-            <!-- Обновил год до 2025 -->
             <p>&copy; 2025 Защитник Нации | РУСЬ. Все права защищены. <br> <a href="https://t.me/naz_power" target="_blank">Telegram-канал</a></p>
         </div>
     </footer>
 
     <script>
-        // Скрипт для обработки клика по кнопке.
-        document.getElementById('subscribe-btn').addEventListener('click', function(event) {
-            window.open(this.href, '_blank');
-        });
-
-        // Скрипт для плавной прокрутки "слайдов"
         document.addEventListener('DOMContentLoaded', () => {
             const sections = document.querySelectorAll('.section');
-            let currentSlideIndex = 0;
-            let isScrolling = false;
-            let lastScroll = 0;
+            const isDesktop = window.matchMedia("(min-width: 768px)").matches;
 
-            // Функция для активации слайда
-            function goToSlide(index) {
-                const now = Date.now();
-                // Защита от слишком быстрой прокрутки и некорректных индексов
-                if (isScrolling || now - lastScroll < 500 || index < 0 || index >= sections.length) {
-                    return;
+            if (isDesktop) {
+                // Логика для прокрутки на настольных ПК (полноэкранный режим)
+                let currentSlideIndex = 0;
+                let isScrolling = false;
+
+                function goToSlide(index) {
+                    if (isScrolling || index < 0 || index >= sections.length) {
+                        return;
+                    }
+
+                    isScrolling = true;
+
+                    sections[currentSlideIndex].classList.remove('active');
+                    sections[index].classList.add('active');
+                    currentSlideIndex = index;
+
+                    setTimeout(() => {
+                        isScrolling = false;
+                    }, 800); // Задержка, чтобы избежать "двойной" прокрутки
                 }
 
-                isScrolling = true;
-                lastScroll = now;
+                // Улучшенный обработчик события прокрутки
+                document.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    if (e.deltaY > 0) {
+                        goToSlide(currentSlideIndex + 1);
+                    } else {
+                        goToSlide(currentSlideIndex - 1);
+                    }
+                }, { passive: false });
 
-                // Деактивируем предыдущий слайд
-                sections[currentSlideIndex].classList.remove('active');
+                // Активируем первый слайд при загрузке
+                sections[0].classList.add('active');
 
-                // Активируем новый слайд
-                sections[index].classList.add('active');
-                currentSlideIndex = index;
+            } else {
+                // Логика для мобильных устройств (плавное появление блоков при прокрутке)
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1 // Процент видимости элемента для активации
+                });
 
-                // Ждем окончания анимации
-                setTimeout(() => {
-                    isScrolling = false;
-                }, 800);
+                document.querySelectorAll('.section, .footer').forEach(element => {
+                    observer.observe(element);
+                });
             }
-
-            // Обработчик события прокрутки
-            document.addEventListener('wheel', (e) => {
-                e.preventDefault();
-                if (e.deltaY > 0) {
-                    goToSlide(currentSlideIndex + 1);
-                } else {
-                    goToSlide(currentSlideIndex - 1);
-                }
-            }, { passive: false });
-
-            // Начальная активация первого слайда
-            sections[0].classList.add('active');
         });
     </script>
 </body>
