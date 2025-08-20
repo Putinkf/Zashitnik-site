@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Официальный сайт русского Telegram-канала «Защитник Нации» — сообщества патриотов России.">
+    <meta name="keywords" content="Защитник Нации, Telegram, патриотизм, Россия, русский канал, Русь, СВО, национализм, чистота нации, история России">
+    <title>Защитник Нации | РУСЬ</title>
+    <!-- Подключение современного шрифта 'Montserrat' -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Подключение Font Awesome для иконок -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Общие стили и цветовая палитра */
+        :root {
+            --color-blue: #141f32;
+            --color-dark-blue: #070c1a;
+            --color-gold: #c9a778;
+            --color-white: #e0e1dd;
+            --color-light-grey: #adb5bd;
+
+            /* Цвета для нового, более заметного градиента */
+            --gradient-color1: #0b1526;
+            --gradient-color2: #14284d;
+            --gradient-color3: #1c3d69;
+            --gradient-color4: #255180;
+        }
+
+        /* Обнуление базовых стилей */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Скрываем прокрутку, так как она контролируется скриптом */
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-dark-blue);
+            color: var(--color-white);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* НОВЫЙ, УЛУЧШЕННЫЙ ГРАДИЕНТНЫЙ ФОН с эффектом звездного неба */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Используем несколько слоев для создания глубины и динамики */
+            background:
+                /* Слой с более заметным "шумом" для эффекта звезд */
+                radial-gradient(ellipse at top left, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
+                radial-gradient(ellipse at bottom right, rgba(255, 255, 255, 0.1) 0%, transparent 70%),
+                /* Основной анимированный градиент */
+                linear-gradient(135deg, #070c1a 0%, #152540 100%),
+                linear-gradient(-45deg, #102030 0%, #1c3d69 100%);
+
+            background-size: 100% 100%, 100% 100%, 300% 300%, 200% 200%;
+            background-position: 0% 0%, 0% 0%, 0% 50%, 100% 50%;
+            animation: cosmic-shift 25s ease-in-out infinite, cosmic-pulse 20s ease-in-out infinite;
+        }
+
+        /* Анимация для смещения градиента */
+        @keyframes cosmic-shift {
+            0% { background-position: 0% 50%, 0% 50%, 0% 50%, 100% 50%; }
+            50% { background-position: 100% 50%, 100% 50%, 100% 50%, 0% 50%; }
+            100% { background-position: 0% 50%, 0% 50%, 0% 50%, 100% 50%; }
+        }
+
+        /* Анимация для пульсации, создающая эффект живого фона */
+        @keyframes cosmic-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Обёртка для полноэкранных слайдов */
+        .fullpage-wrapper {
+            height: 100vh;
+            position: relative;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        /* Улучшенные стили для слайд-секций */
+        .section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            pointer-events: none;
+            /* Анимация прокрутки: плавный выезд слайда снизу */
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+            transform: translateY(100%); /* Все слайды по умолчанию смещены вниз */
+            opacity: 0;
+        }
+
+        /* Активный слайд перемещается на своё место и становится видимым */
+        .section.active {
+            pointer-events: all;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Единый контейнер для содержимого на первых и последних слайдах */
+        .content-container {
+            background-color: var(--color-blue);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Общий контейнер для среднего контента */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 900px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        /* Увеличение контейнера при наведении на средних слайдах */
+        .post-card:hover,
+        .ideology-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px 5px rgba(201, 167, 120, 0.8);
+        }
+
+        /* Главная секция - более элегантный дизайн */
+        .hero {
+            background-color: transparent;
+            color: var(--color-white);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Анимация текста при наведении */
+        .interactive-text {
+            cursor: pointer;
+            transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .hero h1 .interactive-text:hover,
+        .post-card h3 .interactive-text:hover,
+        .ideology-item h3 .interactive-text:hover {
+            color: var(--color-gold);
+            text-shadow: 0 0 10px rgba(201, 167, 120, 0.8);
+            transform: scale(1.02);
+        }
+
+        .hero p .interactive-text:hover,
+        .post-card p .interactive-text:hover,
+        .ideology-item p .interactive-text:hover,
+        .contacts-section p .interactive-text:hover {
+            color: var(--color-white);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 3.5rem);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+            animation: heroTextFadeIn 1.5s ease-out forwards;
+        }
+
+        .hero h1 span {
+            color: var(--color-gold);
+        }
+
+        .hero h1 span.text-gold {
+            text-decoration: underline; /* Подчеркиваем текст */
+            text-underline-offset: 8px; /* Отступ подчеркивания */
+            text-decoration-thickness: 2px; /* Толщина подчеркивания */
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            margin-bottom: 30px;
+            animation: heroTextFadeIn 1.5s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+
+        /* Кнопка с мягким эффектом и обводкой при наведении */
+        .btn-subscribe {
+            display: inline-block;
+            background-color: var(--color-gold);
+            color: var(--color-dark-blue);
+            padding: 15px 35px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+            animation: heroBtnFadeIn 1.5s ease-out 1s forwards;
+            opacity: 0;
+        }
+
+        .btn-subscribe:hover {
+            transform: scale(1.05);
+            background-color: #d1b58e;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 15px 5px rgba(201, 167, 120, 0.8);
+        }
+
+        /* Ключевые кадры для анимации первого слайда */
+        @keyframes heroTextFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heroBtnFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Общие стили для секций */
+        .section-header {
+            font-size: clamp(1.8rem, 6vw, 2rem);
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--color-gold);
+            display: inline-block;
+            padding-bottom: 8px;
+            margin-bottom: 40px;
+            color: var(--color-white);
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+        }
+
+        .section-text {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            color: var(--color-light-grey);
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        /* Сетка для двух колонок */
+        .posts-grid {
+            display: grid;
+            gap: 40px;
+            margin-top: 40px;
+            grid-auto-rows: 1fr; /* Гарантирует одинаковую высоту */
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        /* Сетка для трёх колонок (общие стили) */
+        .three-column-grid {
+            display: grid;
+            gap: 25px;
+            margin-top: 40px;
+            grid-auto-rows: 1fr; /* Гарантирует одинаковую высоту */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        @media (min-width: 1024px) {
+            .three-column-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .three-column-grid, .posts-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+
+        /* Общие стили для карточек, чтобы они были гибкими и выровненными */
+        .post-card, .ideology-item {
+            background-color: var(--color-blue);
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Распределяет пространство между элементами */
+            height: auto;
+        }
+
+        .post-card h3, .ideology-item h3 {
+            font-size: 1.2rem;
+            color: var(--color-gold);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            /* Убедимся, что иконки и текст в заголовке центрированы */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap; /* Разрешаем перенос текста, если он длинный */
+        }
+
+        .post-card h3 i, .ideology-item h3 i {
+            margin-right: 8px;
+        }
+
+        .post-card p {
+            flex-grow: 1; /* Чтобы текст занимал оставшееся пространство */
+            color: var(--color-light-grey);
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            text-align: center;
+        }
+
+        /* Секция с идеологией */
+        .ideology-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            grid-auto-rows: 1fr; /* Гарантирует одинаковую высоту */
+        }
+
+        .ideology-item p {
+            flex-grow: 1; /* Чтобы текст занимал оставшееся пространство */
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            color: var(--color-light-grey);
+            text-align: center;
+        }
+
+        /* Секция с контактами */
+        .contacts-section {
+            background-color: transparent;
+            color: var(--color-white);
+        }
+
+        .contacts-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contacts-list a {
+            color: var(--color-white);
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .contacts-list a:hover {
+            color: var(--color-gold);
+            transform: scale(1.1);
+        }
+
+        /* Футер */
+        .footer {
+            background-color: var(--color-dark-blue);
+            color: var(--color-white);
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--color-blue);
+            height: auto;
+            min-height: 100px;
+        }
+
+        .footer a {
+            color: var(--color-white);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--color-gold);
+        }
+    </style>
+</head>
+<body>
+    <div class="fullpage-wrapper">
+        <!-- Главная секция -->
+        <section class="section active" id="slide-hero">
+            <div class="content-container">
+                <h1>
+                    <span class="interactive-text">ЗАЩИТНИК</span>
+                    <span class="interactive-text text-gold">НАЦИИ</span>
+                </h1>
+                <p><span class="interactive-text">РУСЬ</span></p>
+                <p><span class="interactive-text">Официальный Telegram-канал сообщества «Защитник Нации»</span></p>
+
+                <a href="https://t.me/naz_power" class="btn-subscribe" target="_blank" id="subscribe-btn">
+                    <i class="fas fa-paper-plane"></i> Подписаться в Telegram
+                </a>
+            </div>
+        </section>
+
+        <!-- Секция с лучшими постами -->
+        <section class="section" id="slide-posts">
+            <div class="container">
+                <h2 class="section-header">Наши лучшие посты</h2>
+                <div class="posts-grid">
+                    <div class="post-card">
+                        <h3><i class="fas fa-history"></i> <span class="interactive-text">Память о подвиге и трагедии</span></h3>
+                        <p>
+                            <span class="interactive-text">
+                                <strong>16 на 17 июля 1918 года</strong> — чёрная дата в истории России. В подвале Ипатьевского дома в Екатеринбурге красные палачи — большевики — совершили чудовищное преступление. Царская семья во главе с Императором Николаем II была зверски расстреляна.
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="post-card">
+                        <h3><i class="fas fa-medkit"></i> <span class="interactive-text">Слава военным медикам!</span></h3>
+                        <p>
+                            <span class="interactive-text">
+                                В огне боя, под грохот снарядов, там, где каждый миг — между жизнью и смертью, они стоят на передовой другого фронта — фронта спасения. Военные медики — это не просто врачи, это ангелы-хранители в камуфляже.
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция с последними новостями -->
+        <section class="section news-section" id="slide-news">
+            <div class="container">
+                <h2 class="section-header">Последние новости СВО</h2>
+                <div class="three-column-grid">
+                    <div class="post-card">
+                        <h3><i class="fas fa-bullhorn"></i> <span class="interactive-text">Брифинг МинОбороны</span></h3>
+                        <p>
+                            <span class="interactive-text">Официальный брифинг Министерства Обороны России о ходе специальной военной операции за последнюю неделю. Главные события и достижения наших войск.</span>
+                        </p>
+                    </div>
+                    <div class="post-card">
+                        <h3><i class="fas fa-hand-holding-heart"></i> <span class="interactive-text">Акция "Помощь Фронту"</span></h3>
+                        <p>
+                            <span class="interactive-text">Началась новая общероссийская акция по сбору гуманитарной помощи для наших бойцов на передовой. Каждый может внести свой вклад.</span>
+                        </p>
+                    </div>
+                    <div class="post-card">
+                        <h3><i class="fas fa-book-reader"></i> <span class="interactive-text">Исторический обзор боевых действий</span></h3>
+                        <p>
+                            <span class="interactive-text">Наши военные аналитики подготовили детальный исторический обзор последних ключевых событий в зоне СВО. Анализ тактики и стратегии.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция с идеологией -->
+        <section class="section ideology-section" id="slide-ideology">
+            <div class="container">
+                <h2 class="section-header">Наша Идеология</h2>
+                <div class="section-text">
+                    <p>
+                        <span class="interactive-text">Сообщество «Защитник Нации» объединяет людей, для которых Россия — это не просто страна, а судьба и священная Родина. Мы верим в силу национального духа и непреходящие ценности нашего народа.</span>
+                    </p>
+                </div>
+
+                <div class="three-column-grid">
+                    <div class="ideology-item">
+                        <h3><i class="fas fa-landmark"></i> <span class="interactive-text">Национальное Самосознание</span></h3>
+                        <p>
+                            <span class="interactive-text">Мы чтим нашу историю, культуру и традиции. Мы убеждены, что только через глубокое понимание своего прошлого можно построить достойное будущее.</span>
+                        </p>
+                    </div>
+                    <div class="ideology-item">
+                        <h3><i class="fas fa-handshake"></i> <span class="interactive-text">Единство и Взаимопомощь</span></h3>
+                        <p>
+                            <span class="interactive-text">Нация сильна своим единством. Мы поддерживаем друг друга и стремимся к укреплению связей внутри русского сообщества, как в России, так и за ее пределами.</span>
+                        </p>
+                    </div>
+                    <div class="ideology-item">
+                        <h3><i class="fas fa-shield-alt"></i> <span class="interactive-text">Защита и Суверенитет</span></h3>
+                        <p>
+                            <span class="interactive-text">Мы стоим на страже суверенитета и целостности нашей страны. Мы поддерживаем тех, кто защищает нашу Родину, и готовы сами встать на ее защиту.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция о СВО -->
+        <section class="section" id="slide-support">
+            <div class="container">
+                <h2 class="section-header">Поддержим наших героев</h2>
+                <div class="section-text">
+                    <p>
+                        <span class="interactive-text">Сообщество «Защитник Нации» оказывает всестороннюю поддержку участникам специальной военной операции. Мы верим, что наша общая цель — это победа, и каждый вклад важен.</span>
+                    </p>
+                </div>
+                <a href="https://t.me/naz_power" class="btn-subscribe" target="_blank">
+                    <i class="fas fa-heart"></i> Поддержать
+                </a>
+            </div>
+        </section>
+
+        <!-- Секция с контактами -->
+        <section class="section contacts-section" id="slide-contacts">
+            <div class="content-container">
+                <h2 class="section-header">Контакты</h2>
+                <p>Свяжитесь с нами через наши официальные страницы:</p>
+                <ul class="contacts-list">
+                    <li><a href="https://t.me/naz_power" target="_blank">Telegram</a></li>
+                    <li><a href="https://vk.com/naz_power" target="_blank">ВКонтакте</a></li>
+                </ul>
+            </div>
+        </section>
+    </div>
+    <!-- Футер вынесен из обёртки, чтобы он был доступен после последнего слайда -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Обновил год до 2025 -->
+            <p>&copy; 2025 Защитник Нации | РУСЬ. Все права защищены. <br> <a href="https://t.me/naz_power" target="_blank">Telegram-канал</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Скрипт для обработки клика по кнопке.
+        document.getElementById('subscribe-btn').addEventListener('click', function(event) {
+            window.open(this.href, '_blank');
+        });
+
+        // Скрипт для плавной прокрутки "слайдов"
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            let currentSlideIndex = 0;
+            let isScrolling = false;
+            let lastScroll = 0;
+
+            // Функция для активации слайда
+            function goToSlide(index) {
+                const now = Date.now();
+                // Защита от слишком быстрой прокрутки и некорректных индексов
+                if (isScrolling || now - lastScroll < 500 || index < 0 || index >= sections.length) {
+                    return;
+                }
+
+                isScrolling = true;
+                lastScroll = now;
+
+                // Деактивируем предыдущий слайд
+                sections[currentSlideIndex].classList.remove('active');
+
+                // Активируем новый слайд
+                sections[index].classList.add('active');
+                currentSlideIndex = index;
+
+                // Ждем окончания анимации
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 800);
+            }
+
+            // Обработчик события прокрутки
+            document.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                if (e.deltaY > 0) {
+                    goToSlide(currentSlideIndex + 1);
+                } else {
+                    goToSlide(currentSlideIndex - 1);
+                }
+            }, { passive: false });
+
+            // Начальная активация первого слайда
+            sections[0].classList.add('active');
+        });
+    </script>
+</body>
+</html>
