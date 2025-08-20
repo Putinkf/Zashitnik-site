@@ -52,7 +52,19 @@
             filter: brightness(0.5) blur(3px);
         }
 
-        /* Контейнеры для содержимого */
+        /* ---------------------------------------------------- */
+        /* ГЛАВНЫЕ КОНТЕЙНЕРЫ */
+        /* ---------------------------------------------------- */
+        #slide-reports .wide-container {
+            max-width: 1600px;  /* ограничиваем максимальную ширину контейнера */
+            width: 90%;        /* или фиксированная ширина, например 900px */
+            max-height: 790px; /* ограничение максимальной высоты, можно варьировать */
+            margin: 0 auto;    /* чтобы контейнер был по центру */
+            overflow-y: auto;  /* если контента много, добавим прокрутку по вертикали */
+            padding-top: 100px;   /* оставляем увеличенный отступ сверху */
+            padding-bottom: 100px;/* оставляем увеличенный отступ снизу */
+        }
+
         .content-container, .container {
             background-color: rgba(22, 42, 77, 0.5);
             backdrop-filter: blur(5px);
@@ -60,18 +72,35 @@
             border-radius: 10px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             text-align: center;
+            width: 90%;
             max-width: 900px;
-            width: 100%;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Общий контейнер для среднего контента */
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 40px;
+        }
+
+        /* НОВЫЙ КОНТЕЙНЕР ДЛЯ РАСШИРЕННОЙ СЕТКИ */
+        .wide-container {
+            background-color: rgba(22, 42, 77, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%; /* Занимает почти всю ширину */
+            max-width: 1600px; /* Увеличили максимальную ширину */
+            margin: 80px auto; /* Небольшие отступы сверху и снизу */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Стили для заголовков */
@@ -85,20 +114,6 @@
             color: var(--color-white);
             position: relative;
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-            overflow: hidden;
-        }
-
-        /* Глянцевое сияние для заголовков */
-        .section-header::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
-            transform: skewX(-20deg);
-            transition: left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .section-header:hover::after {
             left: 150%;
@@ -121,8 +136,45 @@
             grid-template-columns: repeat(3, 1fr);
         }
 
+        /* СЕТКА ДЛЯ СЕКЦИИ ОТЧЕТОВ */
+        .reports-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+            grid-auto-rows: 1fr;
+            /* Сетка по умолчанию для мобильных */
+            grid-template-columns: 1fr;
+        }
+
+        @media (max-width: 767px) {
+            body, html {
+                overflow-y: auto !important;
+                height: auto !important;
+            }
+
+            #slide-reports {
+                padding-top: 20px !important;  /* уменьшите отступ сверху */
+                margin-top: 0 !important;
+            }
+        }
+
+        /* Планшеты: две колонки */
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .reports-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Десктопы: 5 колонок или сколько у вас есть */
+        @media (min-width: 1200px) {
+            .reports-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+
         /* Стили для карточек */
-        .post-card, .ideology-item {
+        .post-card, .ideology-item, .report-card {
             background-color: rgba(22, 42, 77, 0.5);
             padding: 15px;
             border-radius: 10px;
@@ -135,32 +187,33 @@
             height: auto;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         /* Анимация золотой рамки на карточках */
-        .post-card::before, .ideology-item::before {
+        .post-card::before, .ideology-item::before, .report-card::before {
             content: '';
             position: absolute; top: 0; left: 0; width: 0; height: 2px;
             background-color: var(--color-gold); transition: width 0.3s ease-out;
         }
-        .post-card:hover::before, .ideology-item:hover::before { width: 100%; }
-        .post-card::after, .ideology-item::after {
+        .post-card:hover::before, .ideology-item:hover::before, .report-card:hover::before { width: 100%; }
+        .post-card::after, .ideology-item::after, .report-card::after {
             content: ''; position: absolute; bottom: 0; right: 0; width: 0; height: 2px;
             background-color: var(--color-gold); transition: width 0.3s ease-out; transition-delay: 0.3s;
         }
-        .post-card:hover::after, .ideology-item:hover::after { width: 100%; }
-        .post-card .post-card-border-left, .ideology-item .ideology-item-border-left {
+        .post-card:hover::after, .ideology-item:hover::after, .report-card:hover::after { width: 100%; }
+        .post-card .post-card-border-left, .ideology-item .ideology-item-border-left, .report-card .report-card-border-left {
             content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 0;
             background-color: var(--color-gold); transition: height 0.3s ease-out; transition-delay: 0.6s;
         }
-        .post-card:hover .post-card-border-left, .ideology-item:hover .ideology-item-border-left { height: 100%; }
-        .post-card .post-card-border-right, .ideology-item .ideology-item-border-right {
+        .post-card:hover .post-card-border-left, .ideology-item:hover .ideology-item-border-left, .report-card:hover .report-card-border-left { height: 100%; }
+        .post-card .post-card-border-right, .ideology-item .ideology-item-border-right, .report-card .report-card-border-right {
             content: ''; position: absolute; top: 0; right: 0; width: 2px; height: 0;
             background-color: var(--color-gold); transition: height 0.3s ease-out; transition-delay: 0.9s;
         }
-        .post-card:hover .post-card-border-right, .ideology-item:hover .ideology-item-border-right { height: 100%; }
+        .post-card:hover .post-card-border-right, .ideology-item:hover .ideology-item-border-right, .report-card:hover .report-card-border-right { height: 100%; }
 
-        .post-card h3, .ideology-item h3 {
+        .post-card h3, .ideology-item h3, .report-card h3 {
             font-size: 1.2rem;
             color: var(--color-gold);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -173,7 +226,7 @@
             flex-wrap: wrap;
         }
 
-        .post-card p, .ideology-item p {
+        .post-card p, .ideology-item p, .report-card p {
             flex-grow: 1;
             color: var(--color-light-grey);
             font-size: 0.9rem;
@@ -193,6 +246,7 @@
             font-size: 1rem;
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
             box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
         }
 
         .btn-subscribe:hover, .contact-btn:hover {
@@ -223,34 +277,18 @@
             margin-top: 20px;
         }
 
-        /* ---------------------------------------------------- */
         /* Анимации для плавного появления текста */
-        /* ---------------------------------------------------- */
         @keyframes heroTextFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes heroBtnFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        /* ---------------------------------------------------- */
         /* Стили для настольной версии (по умолчанию) */
-        /* ---------------------------------------------------- */
         .fullpage-wrapper {
             height: 100vh;
             position: relative;
@@ -291,36 +329,35 @@
         .hero p {
             font-size: 1.2rem;
             margin-bottom: 25px;
-            opacity: 0; /* Начальное состояние для анимации */
+            opacity: 0;
             animation: heroTextFadeIn 1.5s ease-out 0.5s forwards;
         }
 
         .btn-subscribe {
-            opacity: 0; /* Начальное состояние для анимации */
+            opacity: 0;
             animation: heroBtnFadeIn 1.5s ease-out 1s forwards;
         }
 
-        .post-card:hover, .ideology-item:hover {
+        .post-card:hover, .ideology-item:hover, .report-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
 
-        /* ---------------------------------------------------- */
         /* Стили для мобильных устройств (переопределение) */
-        /* ---------------------------------------------------- */
         @media (max-width: 767px) {
             body {
                 overflow-x: hidden;
-                overflow-y: auto; /* Включаем прокрутку */
+            }
+            /* КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: Отключаем прокрутку, если у body есть класс no-scroll */
+            body.no-scroll {
+                overflow: hidden;
             }
 
-            /* Отключаем полноэкранный режим */
             .fullpage-wrapper {
                 height: auto;
                 position: relative;
             }
 
-            /* Сбрасываем стили секций для мобильной версии */
             .section {
                 position: relative;
                 height: auto;
@@ -331,17 +368,9 @@
                 margin-bottom: 20px;
             }
 
-            /* На мобильных убираем анимации и градиенты для лучшей производительности */
             .hero h1, .hero p, .btn-subscribe {
                 animation: none !important;
                 opacity: 1 !important;
-            }
-            .hero h1 .interactive-text {
-                background: none;
-                -webkit-background-clip: unset;
-                background-clip: unset;
-                -webkit-text-fill-color: var(--color-white);
-                color: var(--color-white);
             }
 
             .hero h1 {
@@ -349,27 +378,181 @@
             }
 
             .posts-grid, .three-column-grid {
-                grid-template-columns: 1fr; /* Одна колонка для мобильных */
+                grid-template-columns: 1fr;
             }
 
-            .post-card:hover, .ideology-item:hover {
-                transform: none; /* Отключаем анимации при наведении */
+            .post-card:hover, .ideology-item:hover, .report-card:hover {
+                transform: none;
             }
 
             .post-card::before, .post-card::after,
             .ideology-item::before, .ideology-item::after,
             .post-card .post-card-border-left, .post-card .post-card-border-right,
-            .ideology-item .ideology-item-border-left, .ideology-item .ideology-item-border-right {
-                display: none; /* Отключаем рамки при наведении */
+            .ideology-item .ideology-item-border-left, .ideology-item .ideology-item-border-right,
+            .report-card::before, .report-card::after,
+            .report-card .report-card-border-left, .report-card .report-card-border-right {
+                display: none;
             }
 
-            /* Стиль для футера */
             .footer {
                 padding: 20px;
                 background-color: rgba(12, 26, 46, 0.8);
                 margin-top: 0;
             }
         }
+
+        /* Стили для модального окна */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--color-dark-blue);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: left;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2rem;
+            color: var(--color-white);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        .modal-content .close-btn:hover {
+            color: var(--color-gold);
+        }
+
+        .modal-content video, .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            max-width: 800px;
+            max-height: 500px;
+        }
+
+        /* ДОБАВЛЕНО: стили для описания внутри модального окна */
+        .modal-content h3, .modal-content p {
+            margin: 0 0 10px;
+            text-align: center;
+        }
+        .modal-content p.description {
+            text-align: left;
+            font-size: 1rem;
+            color: var(--color-light-grey);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        .modal-content ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        .modal-content ul li {
+            margin-bottom: 10px;
+        }
+        .modal-content ul li strong {
+            color: var(--color-gold);
+        }
+
+        .modal-donation .modal-content {
+            text-align: center;
+        }
+        .modal-donation .modal-content h3 {
+            font-size: 1.5rem;
+        }
+
+        /* Улучшенные стили для карточек отчетов */
+        .report-card {
+            padding: 0;
+            text-align: left;
+        }
+        .report-card-image {
+            width: 100%;
+            height: 150px;
+            background-color: #000;
+            position: relative;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-white);
+            font-size: 3rem;
+        }
+        .report-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .report-card:hover .report-card-image img {
+            opacity: 1;
+        }
+        .report-card .report-card-image i {
+            position: absolute;
+            z-index: 10;
+            color: var(--color-gold);
+            font-size: 4rem;
+            opacity: 0.9;
+        }
+        .report-card .report-card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            flex-grow: 1;
+        }
+        .report-card .report-card-content h3 {
+            font-size: 1.1rem;
+            border-bottom: none;
+            text-align: left;
+            margin-bottom: 0; /* Убрано, чтобы не было лишнего места */
+            color: var(--color-gold);
+        }
+
+        /* СКРЫВАЕМ ОПИСАНИЕ В КАРТОЧКАХ */
+        .report-card .report-card-content p {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -377,9 +560,7 @@
         <!-- Главная секция -->
         <section class="section active" id="slide-hero">
             <div class="content-container hero">
-                <h1>
-                    <span class="interactive-text">ЗАЩИТНИК НАЦИИ</span>
-                </h1>
+                <h1>ЗАЩИТНИК НАЦИИ</h1>
                 <p>РУСЬ</p>
                 <p>Официальный Telegram-канал сообщества «Защитник Нации»</p>
 
@@ -405,7 +586,7 @@
                     <div class="post-card">
                         <span class="post-card-border-left"></span>
                         <span class="post-card-border-right"></span>
-                        <h3><i class="fas fa-medkit"></i> Слава военным медикам!</h3>
+                        <h3><i class="fas fa-medkit"></i> Слава военным медикам Русской Армии!</h3>
                         <p>
                             В огне боя, под грохот снарядов, там, где каждый миг — между жизнью и смертью, они стоят на передовой другого фронта — фронта спасения. Военные медики — это не просто врачи, это ангелы-хранители в камуфляже.
                         </p>
@@ -422,7 +603,7 @@
                     <div class="post-card">
                         <span class="post-card-border-left"></span>
                         <span class="post-card-border-right"></span>
-                        <h3><i class="fas fa-bullhorn"></i> Брифинг МинОбороны</h3>
+                        <h3><i class="fas fa-bullhorn"></i> Брифинг Министерства Обороны</h3>
                         <p>
                             Официальный брифинг Министерства Обороны России о ходе специальной военной операции за последнюю неделю. Главные события и достижения наших войск.
                         </p>
@@ -442,6 +623,123 @@
                         <p>
                             Наши военные аналитики подготовили детальный исторический обзор последних ключевых событий в зоне СВО. Анализ тактики и стратегии.
                         </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- СЕКЦИЯ: Отчеты о сборах - ИСПОЛЬЗУЕМ НОВЫЙ ШИРОКИЙ КОНТЕЙНЕР -->
+        <section class="section" id="slide-reports">
+            <div class="wide-container">
+                <h2 class="section-header">Отчеты о гуманитарных сборах</h2>
+                <div class="reports-grid">
+                    <!-- Отчет 1 -->
+                    <div class="report-card" data-video="video1.mp4" data-description="Доставили гуманитарку для наших бойцов из 4-ого сводного стрелкового батальона по прикрытию границ Ямпольского полка! Всё самое необходимое.">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video1.png">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>Доставка помощи для Ямпольского полка</h3>
+                        </div>
+                    </div>
+                    <!-- Отчет 2 -->
+                    <div class="report-card" data-video="video2.MOV" data-description="Гуманитарный груз доставлен нашей медгруппе 42-ого медбата. Доставили всё необходимое в срок. Мы вместе с фронтом!">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video2.png">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>Груз для 42-ого медбата</h3>
+                        </div>
+                    </div>
+                    <!-- Отчет 3 -->
+                    <div class="report-card" data-video="video3.MOV" data-description="Сегодня мы с гордостью сообщаем, что отправляемся в путь, чтобы доставить гуманитарный груз нашим бойцам на передовую.">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video3.png">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>Отправка груза на передовую</h3>
+                        </div>
+                    </div>
+                    <!-- Отчет 4 -->
+                    <div class="report-card" data-video="video4.MOV" data-description="Наши кандидаты в муниципальные депутаты принесли в наш Волонтёрский центр помощь для наших соотечественников из Курской области!">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video4.png">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>Помощь жителям Курской области</h3>
+                        </div>
+                    </div>
+                    <!-- Отчет 5 -->
+                    <div class="report-card" data-video="video5.MOV" data-description="Закупили определённые позиции: Влажная туалетная бумага, бинты, вата, детские книжки. Спасибо, верные соратники!">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video5.png">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>Гуманитарная помощь для Курской области</h3>
+                        </div>
+                    </div>
+                    <!-- Отчет 6 -->
+                    <div class="report-card" data-video="video6.mp4" data-description="Месяц назад к нам обратились бойцы подразделения «БАРС» с просьбой помочь им приобрести дрон Mavic 3T. Сегодня смогли передать его.">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video6.png">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>Передали Мавик 3Т для «БАРС»</h3>
+                        </div>
+                    </div>
+                    <!-- Отчет 7 -->
+                    <div class="report-card" data-video="video7.mp4" data-description="Совместно с командой ЛДПР и Молодёжкой ЛДПР мы собрали для наших раненых бойцов всё самое необходимое! Спасибо каждому!">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video7.png">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>Помощь раненым в Госпитале</h3>
+                        </div>
+                    </div>
+                    <!-- Отчет 8 (изображение) -->
+                    <div class="report-card" data-image="video8.jpg" data-description="На днях в нашем Московском отделении прошёл сбор гуманитарной помощи бойцам СВО. Медикаменты, предметы личной гигиены - были переданы в фонд.">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video8.jpg" alt="Фото отчет">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>Московское отделение - Сбор гум.помощи</h3>
+                        </div>
+                    </div>
+                    <!-- Отчет 9 (изображение) -->
+                    <div class="report-card" data-image="video9.jpg" data-description="«Буханка» наша. Благодаря Вашей поддержке и средствам военнослужащих, нам удалось приобрести данный аппарат.">
+                        <span class="report-card-border-left"></span>
+                        <span class="report-card-border-right"></span>
+                        <div class="report-card-image">
+                            <img src="video9.jpg">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="report-card-content">
+                            <h3>УАЗик «Буханка» для фронта</h3>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -495,7 +793,8 @@
                         Сообщество «Защитник Нации» оказывает всестороннюю поддержку участникам специальной военной операции. Мы верим, что наша общая цель — это победа, и каждый вклад важен.
                     </p>
                 </div>
-                <a href="https://t.me/naz_power" class="btn-subscribe" target="_blank">
+                <!-- Кнопка теперь открывает модальное окно с реквизитами -->
+                <a href="#" class="btn-subscribe open-donation-modal" id="donation-btn">
                     <i class="fas fa-heart"></i> Поддержать
                 </a>
             </div>
@@ -517,6 +816,12 @@
                             <i class="fab fa-vk"></i> ВКонтакте
                         </a>
                     </li>
+                    <!-- Добавлена ссылка на YouTube -->
+                    <li>
+                        <a href="https://www.youtube.com/channel/UCbTrN1bnI3Ty3y4_zrqwVeA" class="contact-btn" target="_blank">
+                            <i class="fab fa-youtube"></i> YouTube
+                        </a>
+                    </li>
                 </ul>
             </div>
         </section>
@@ -528,18 +833,131 @@
         </div>
     </footer>
 
+    <!-- Модальное окно для видео/фото отчетов -->
+    <div class="modal-overlay" id="report-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 id="modal-report-title"></h3>
+            <video id="modal-video" controls autoplay playsinline muted></video>
+            <img id="modal-image" style="display: none;">
+            <p id="modal-report-text" class="description"></p>
+        </div>
+    </div>
+
+    <!-- Модальное окно для реквизитов -->
+    <div class="modal-overlay modal-donation" id="donation-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3 class="section-header">Реквизиты для поддержки</h3>
+            <ul>
+                <li><strong>DonationAlerts</strong> (ссылка будет добавлена)</li>
+                <li><strong>Сбер:</strong> 5228600577854005 (Илья Дмитриевич)</li>
+                <li><strong>TRC20 USDT:</strong> TFWoLswwoaAzdzAa18KPmq8pQbBEvHXj4f</li>
+                <li><strong>BTC:</strong> 15SK6x63vHU97YtQL5NeimVL6xZtGspxu5</li>
+            </ul>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sections = document.querySelectorAll('.section');
             const isDesktop = window.matchMedia("(min-width: 768px)").matches;
 
+            // Получаем модальные окна и кнопки
+            const reportModal = document.getElementById('report-modal');
+            const donationModal = document.getElementById('donation-modal');
+            const closeButtons = document.querySelectorAll('.close-btn');
+            const reportCards = document.querySelectorAll('#slide-reports .report-card');
+            const donationBtn = document.getElementById('donation-btn');
+            const modalVideo = document.getElementById('modal-video');
+            const modalImage = document.getElementById('modal-image');
+            const modalReportTitle = document.getElementById('modal-report-title');
+            const modalReportText = document.getElementById('modal-report-text');
+
+            // Флаг для отслеживания состояния модального окна
+            let isModalOpen = false;
+
+            // Функция для открытия модального окна
+            function openModal(modal) {
+                modal.classList.add('active');
+                isModalOpen = true;
+                // На мобильных устройствах отключаем скроллинг страницы
+                if (!isDesktop) {
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            // Функция для закрытия модального окна
+            function closeModal(modal) {
+                modal.classList.remove('active');
+                isModalOpen = false;
+                // Включаем скроллинг страницы
+                document.body.style.overflow = '';
+                // Останавливаем видео при закрытии модального окна
+                if (modal === reportModal) {
+                    modalVideo.pause();
+                    modalVideo.currentTime = 0;
+                }
+            }
+
+            // Обработчики для закрытия модальных окон
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    closeModal(btn.closest('.modal-overlay'));
+                });
+            });
+
+            // Закрытие при клике вне модального окна
+            reportModal.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-overlay')) {
+                    closeModal(reportModal);
+                }
+            });
+            donationModal.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-overlay')) {
+                    closeModal(donationModal);
+                }
+            });
+
+            // Обработчик для кнопки "Поддержать"
+            donationBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal(donationModal);
+            });
+
+            // Обработчик для карточек с отчетами
+            reportCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const videoSrc = card.getAttribute('data-video');
+                    const imageSrc = card.getAttribute('data-image');
+                    const title = card.querySelector('.report-card-content h3').textContent;
+                    const description = card.getAttribute('data-description');
+
+                    modalReportTitle.textContent = title;
+                    modalReportText.textContent = description;
+
+                    if (videoSrc) {
+                        modalVideo.style.display = 'block';
+                        modalImage.style.display = 'none';
+                        modalVideo.src = videoSrc;
+                        modalVideo.play();
+                    } else if (imageSrc) {
+                        modalVideo.style.display = 'none';
+                        modalImage.style.display = 'block';
+                        modalImage.src = imageSrc;
+                    }
+                    openModal(reportModal);
+                });
+            });
+
+            // Логика прокрутки для настольных ПК
             if (isDesktop) {
-                // Логика для прокрутки на настольных ПК (полноэкранный режим)
                 let currentSlideIndex = 0;
                 let isScrolling = false;
 
                 function goToSlide(index) {
-                    if (isScrolling || index < 0 || index >= sections.length) {
+                    // Блокируем переключение слайдов, если модальное окно открыто
+                    if (isScrolling || isModalOpen || index < 0 || index >= sections.length) {
                         return;
                     }
 
